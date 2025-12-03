@@ -1,0 +1,41 @@
+@model List<NotesApp.Models.Note>
+
+@{
+    ViewData["Title"] = "All Notes";
+}
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Notes</h1>
+    <a class="btn btn-primary" href="/Notes/Create">New Note</a>
+</div>
+
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No notes yet — create the first one.</div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var note in Model)
+        {
+            <div class="list-group-item mb-2">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="mb-1">@note.Title</h5>
+                        <small class="text-muted">Created: @note.CreatedAt.ToLocalTime().ToString("g") @if(note.IsEdited){
+                        <text> • Edited: @note.UpdatedAt?.ToLocalTime().ToString("g")</text>
+                    }
+    </small>
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-outline-secondary me-1" href="/Notes/Edit/@note.Id">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger" href="/Notes/Delete/@note.Id">Delete</a>
+                </div>
+            </div>
+            <p class="mt-2">@Html.Raw(System.Net.WebUtility.HtmlEncode(note.Content).Replace("\n", "<br />"))</p>
+        </div>
+    }
+</div>
+}
